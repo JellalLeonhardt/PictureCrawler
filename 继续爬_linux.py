@@ -16,25 +16,28 @@ for num in range(a, b, 1):
     }
     print url
     req = urllib2.Request(url, headers = send_headers)
-    r = urllib2.urlopen(req)
-    source = r.read()
-    source = source.decode('gbk')
-    target = html.fromstring(source)
-    lists = target.xpath('//div[@class="metaRight"]/h2/a/text()')
-    if len(lists)==0:
-        continue
-    title = target.xpath('//div[@class="metaRight"]/h2/a/text()')[0]
-    print title
-    purl = target.xpath('//div[@id="picture"]/p/img/@src')
-    fname = '/home/pictures/' + title
-    print fname
-    os.makedirs(fname)
-    for c in purl:
-        print c
-        d = d+1
-        name = fname+('\\{}.jpg'.format(d))
-        print name
-        with open(name, "wb") as jpg:
-            jpg.write(requests.get(c).content)
-            time.sleep(0.1)
-    print('finishi!', num)
+    try:
+        r = urllib2.urlopen(req)
+        source = r.read()
+        source = source.decode('gbk')
+        target = html.fromstring(source)
+        lists = target.xpath('//div[@class="metaRight"]/h2/a/text()')
+        if len(lists)==0:
+            continue
+        title = target.xpath('//div[@class="metaRight"]/h2/a/text()')[0]
+        print title
+        purl = target.xpath('//div[@id="picture"]/p/img/@src')
+        fname = '/home/pictures/' + title
+        print fname
+        os.makedirs(fname)
+        for c in purl:
+            print c
+            d = d+1
+            name = fname+('/{}.jpg'.format(d))
+            print name
+            with open(name, "wb") as jpg:
+                jpg.write(requests.get(c).content)
+                time.sleep(0.1)
+        print('finishi!', num)
+    except Exception as e:
+        print('Error:', e)
