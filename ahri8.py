@@ -2,39 +2,50 @@ import urllib2
 import requests
 import os
 import time
+import json
 from lxml import html
+id = str(input("id:"))
 url = "https://ahri8.com/"
-page = "readOnline2.php?ID=38975&host_id=0&page=1"
-while 1:
+page = "readOnline2.php?ID=" + id + "&host_id=0&page=1"
+if 1:
     current = url + page
-    req = urllib2.Request(current, headers=send_headers)
+    req = urllib2.Request(current)
     try:
         r = urllib2.urlopen(req)
         source = r.read()
-        source = source.decode('gbk')
-        first = source.find("HTTP_IMAGE")
-        first = source.find("HTTP_IMAGE", first)
-        second = source.find("HTTP_IMAGE", first)
-        print source.sub(first, second)
+        #source = source.decode('utf-8')
+        first = source.find("var HTTP_IMAGE")
+        first = source.find("\"", first)
+        second = source.find("\"", first + 1)
+        image_server = source[first + 1:second]
+	first = source.find("Origin", second + 1)
+	first = source.find("Origin", first + 1)
+	first = source.find("[", first + 1)
+	second = source.find("]", first + 1);
+	image_source = json.loads(source[first:second + 1])
+	images = []
+	for image in image_source:
+	    images.append(image_server + str(image[u'new_filename'] + '_w900' + '.' + image[u'extension'])) #no idea where w900 come from
+	#print images
         target = html.fromstring(source)
         #next_page = title = target.xpath(
         #    '//a[@onclick="return goNextPage();"]/text()')[0]
         #if page == next_page:
         #    break
-        #title = target.xpath('//h1[@class="page-header"]/text()')[0]
+        title = target.xpath('//h1[@class="page-header"]/text()')[0]
         #print title
         #purl = target.xpath('//div[@id="show_image_area"]/div/img/@src')
-        #fname = '/home/pictures/' + title
-        #print fname
-        #os.makedirs(fname)
-        #for c in purl:
-        #    print c
-        #    d = d+1
-        #    name = fname+('/{}.jpg'.format(d))
-        #    print name
-        #    with open(name, "wb") as jpg:
-        #        jpg.write(requests.get(c).content)
-        #        time.sleep(0.1)
-        #print('finishi!', num)
+        fname = '/home/pictures/' + title
+        print fname
+        os.makedirs(fname)
+	d = 0
+        for i in images:
+            d = d+1
+            name = fname + ('/{}.'.format(d)) + str(image_source[0][u'extension'])
+            print i
+            with open(name, "wb") as jpg:
+                jpg.write(requests.get(i).content)
+                time.sleep(0.1)
+        print('finishi!')
     except Exception as e:
         print('Error:', e)
