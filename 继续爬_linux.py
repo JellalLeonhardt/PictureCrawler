@@ -10,6 +10,7 @@ for num in range(a, b, 1):
     url = 'http://www.meizitu.com/a/{}.html'.format(num)
     print url
     target = html.fromstring(requests.get(url).content)
+    print target
     lists = target.xpath('//div[@class="metaRight"]/h2/a/text()')
     print(len(lists))
     title = target.xpath('//div[@class="metaRight"]/h2/a/text()')[0]
