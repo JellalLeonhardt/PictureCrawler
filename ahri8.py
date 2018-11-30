@@ -12,25 +12,29 @@ while 1:
         r = urllib2.urlopen(req)
         source = r.read()
         source = source.decode('gbk')
+        first = source.find("HTTP_IMAGE")
+        first = source.find("HTTP_IMAGE", first)
+        second = source.find("HTTP_IMAGE", first)
+        print source.sub(first, second)
         target = html.fromstring(source)
-        next_page = title = target.xpath(
-            '//a[@onclick="return goNextPage();"]/text()')[0]
-        if page == next_page:
-            break
-        title = target.xpath('//h1[@class="page-header"]/text()')[0]
-        print title
-        purl = target.xpath('//div[@id="show_image_area"]/div/img/@src')
-        fname = '/home/pictures/' + title
-        print fname
-        os.makedirs(fname)
-        for c in purl:
-            print c
-            d = d+1
-            name = fname+('/{}.jpg'.format(d))
-            print name
-            with open(name, "wb") as jpg:
-                jpg.write(requests.get(c).content)
-                time.sleep(0.1)
-        print('finishi!', num)
+        #next_page = title = target.xpath(
+        #    '//a[@onclick="return goNextPage();"]/text()')[0]
+        #if page == next_page:
+        #    break
+        #title = target.xpath('//h1[@class="page-header"]/text()')[0]
+        #print title
+        #purl = target.xpath('//div[@id="show_image_area"]/div/img/@src')
+        #fname = '/home/pictures/' + title
+        #print fname
+        #os.makedirs(fname)
+        #for c in purl:
+        #    print c
+        #    d = d+1
+        #    name = fname+('/{}.jpg'.format(d))
+        #    print name
+        #    with open(name, "wb") as jpg:
+        #        jpg.write(requests.get(c).content)
+        #        time.sleep(0.1)
+        #print('finishi!', num)
     except Exception as e:
         print('Error:', e)
