@@ -8,11 +8,21 @@ b = int(input("end:"))
 for num in range(a, b, 1):
     d = 0
     url = 'http://www.meizitu.com/a/{}.html'.format(num)
+    send_headers = {
+    	'Host':'www.meizitu.com',
+	'User-Agent':'Mozilla/5.0 (Windows NT 6.2; rv:16.0) Gecko/20100101 Firefox/16.0',
+	'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+	'Connection':'keep-alive'
+    }
     print url
-    target = html.fromstring(requests.get(url).content)
-    print target
+    req = urllib2.Request(url, headers = send_headers)
+    r = urllib2.urlopen(req)
+    source = r.read()
+    source = source.decode('gbk')
+    target = html.fromstring(source)
     lists = target.xpath('//div[@class="metaRight"]/h2/a/text()')
-    print(len(lists))
+    if len(lists)==0:
+        continue
     title = target.xpath('//div[@class="metaRight"]/h2/a/text()')[0]
     print title
     purl = target.xpath('//div[@id="picture"]/p/img/@src')
