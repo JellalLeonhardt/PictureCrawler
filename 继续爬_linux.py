@@ -32,7 +32,7 @@ for num in range(a, b, 1):
     for c in purl:
         print c
         d = d+1
-        name = fname+('\\{}.jpg'.format(d))
+        name = fname+('/{}.jpg'.format(d))
         print name
         with open(name, "wb") as jpg:
             jpg.write(requests.get(c).content)
