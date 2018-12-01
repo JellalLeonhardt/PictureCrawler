@@ -4,10 +4,11 @@ import os
 import time
 import json
 from lxml import html
-id = str(input("id:"))
+start = input("start:")
+end = input("end:")
 url = "https://ahri8.com/"
-page = "readOnline2.php?ID=" + id + "&host_id=0&page=1"
-if 1:
+for id in range (start, end + 1):
+    page = "readOnline2.php?ID=" + str(id) + "&host_id=0&page=1"
     current = url + page
     req = urllib2.Request(current)
     try:

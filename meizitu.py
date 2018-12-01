@@ -5,7 +5,7 @@ import time
 from lxml import html
 a = int(input("start:"))
 b = int(input("end:"))
-for num in range(a, b, 1):
+for num in range(a, b + 1, 1):
     d = 0
     url = 'http://www.meizitu.com/a/{}.html'.format(num)
     send_headers = {
