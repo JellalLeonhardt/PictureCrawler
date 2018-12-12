@@ -11,21 +11,23 @@ send_headers = {
 for num in range(a, b + 1, 1):
     url = 'http://mtl.ttsqgs.com/images/img/' + '{}/'.format(num)
     img = 0
-    send_headers['Reffer'] = 'https://www.meitulu.com/item/{}.html'.format(num)
-    req = urllib2.Request(send_headers['Reffer'], headers=send_headers)
+    send_headers['Referer'] = 'https://www.meitulu.com/item/{}.html'.format(num)
+    req = urllib2.Request(send_headers['Referer'], headers=send_headers)
     r = urllib2.urlopen(req)
     source = r.read()
     target = html.fromstring(source.decode('utf-8'))
     title = target.xpath('//div[@class="weizhi"]/h1/text()')[0]
     fname = '/home/pictures/' + title
+    os.makedirs(fname)
     while 1:
         img = img + 1
         img_url = url + '{}.jpg'.format(img)
+	print img_url
         req = urllib2.Request(img_url, headers=send_headers)
         try:
             r = urllib2.urlopen(req)
             name = fname + '/{}.jpg'.format(img)
-			with open(name, "wb") as jpg:
+    	    with open(name, "wb") as jpg:
             	jpg.write(r.read())
         except Exception as e:
             print('Error:', e)
