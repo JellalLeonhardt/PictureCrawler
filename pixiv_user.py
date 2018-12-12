@@ -6,12 +6,13 @@ import json
 from lxml import html
 a = int(input("start:"))
 b = int(input("end:"))
+cookie = input("cookie:")
 send_headers = {
     'accept': 'application/json',
 	'accept-encoding': 'gzip, deflate, br',
 	'accept-language': 'zh-CN,zh;q=0.9',
 	'cache-control': 'no-cache',
-	'cookie': '',
+	'cookie': cookie,
 	'pragma': 'no-cache',
 	'referer': 'https://www.pixiv.net/member_illust.php?id=340628',
 	'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
