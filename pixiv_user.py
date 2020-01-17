@@ -8,7 +8,7 @@ import StringIO
 from lxml import html
 nums = []
 nums = list(map(int, raw_input().split()))
-#while 1:
+# while 1:
 #    try:
 #        s = raw_input()
 #        nums.append(s)
@@ -35,23 +35,26 @@ for num in nums:
         break
     source = r.read()
     compressedstream = StringIO.StringIO(source)
-    gziper = gzip.GzipFile(fileobj=compressedstream)  
+    gziper = gzip.GzipFile(fileobj=compressedstream)
     source = gziper.read()
     source = source.decode('utf-8')
     images_json = json.loads(source)
     for image in images_json['body']['illusts']:
-	url_target = 'https://www.pixiv.net/member_illust.php?mode=medium&illust_id={}'.format(image)
+        url_target = 'https://www.pixiv.net/member_illust.php?mode=medium&illust_id={}'.format(
+            image)
         req_target = urllib2.Request(url_target, headers=send_headers)
         r_target = urllib2.urlopen(req_target)
-        target_target = gzip.GzipFile(fileobj=StringIO.StringIO(r_target.read())).read().decode('utf-8')
+        target_target = gzip.GzipFile(fileobj=StringIO.StringIO(
+            r_target.read())).read().decode('utf-8')
         first = target_target.find("img-original")
         second = target_target.find("\"", first)
-	final_url = 'https:\/\/i.pximg.net/' + target_target[first:second]
-	final_url = final_url.replace('\\/', '/')
-        print final_url
-	name_start = final_url.rfind('/')
-	name = '/home/pixiv_pictures/' + final_url[name_start + 1:]
-	picture = urllib2.urlopen(urllib2.Request(final_url, headers=send_headers))
+        final_url = 'https:\/\/i.pximg.net/' + target_target[first:second]
+        final_url = final_url.replace('\\/', '/')
+        print(final_url)
+        name_start = final_url.rfind('/')
+        name = '/home/pixiv_pictures/' + final_url[name_start + 1:]
+        picture = urllib2.urlopen(urllib2.Request(
+            final_url, headers=send_headers))
         with open(name, "wb") as jpg:
             jpg.write(picture.read())
     print('finishi!', num)
